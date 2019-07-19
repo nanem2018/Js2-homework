@@ -1,8 +1,35 @@
 //ФЭЙК ЭПИ
-const API_URL = 'https://raw.githubusercontent.com/nanem2018/online-store-api';
+const API_URL = 'https://raw.githubusercontent.com/nanem2018/online-store-api/master';
 
 const image = 'https://placehold.it/200x150';
 const cartImage = 'https://placehold.it/100x80';
+
+//
+/*
+const async = (a, cb) => {
+  setTimeout(() => {
+    const b = a + 1;
+    cb(b);
+  }, 200);
+}
+
+const async = (a) => {
+	return new Promise((resolve, reject) => {
+	  setTimeout(() => {
+		if (a) {
+		  const b = a + 1;
+		  resolve(b);
+		} else {
+		  reject('Error');
+		}
+	  }, 200);
+	});
+  }
+  
+
+
+*/
+
 
 function makeGETRequest(url, callback) {
 	let xhr;
@@ -13,16 +40,20 @@ function makeGETRequest(url, callback) {
 	  xhr = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 
-	xhr.onreadystatechange = function () {
+	xhr.onreadystatechange = function() {
+		return new Promise((resolve, reject)=>{
 	  if (xhr.readyState === 4) {
-		callback(xhr.responseText);
+		resolve(xhr.responseText);
+	  }else{
+		  reject('Error');
 	  }
+		
 	}
-
+		)
 	xhr.open('GET', url, true);
 	xhr.send();
   }
-
+}
 //Глобальные сущности 
 var userCart = [];
 
@@ -31,6 +62,9 @@ class GoodsList {
 		this.goods = []
 	}
 	
+
+
+
 	fetchGoods (cb) {
 		makeGETRequest(`${API_URL}/catalogData.json`, (goods) => {
 			this.goods = JSON.parse(goods);
